@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>Balance — Life Wheel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    button { -webkit-tap-highlight-color: transparent; font-family: inherit; }
+
+    :root {
+      --bg: #ffffff;
+      --surface: #ffffff;
+      --border: #efefef;
+      --text: #0a0a0a;
+      --muted: #737373;
+      --subtle: #f5f5f5;
+
+      --physical: #14b8a6;
+      --growth: #a855f7;
+      --social: #f43f5e;
+      --work: #4f6ef7;
+
+      --physical-light: #ccfbf1;
+      --growth-light: #f3e8ff;
+      --social-light: #ffe4e6;
+      --work-light: #e0e7ff;
+
+      --r-sm: 10px;
+      --r-md: 16px;
+      --r-lg: 22px;
+      --r-pill: 100px;
+      --shadow-sm: 0 1px 4px rgba(0,0,0,0.06);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100svh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 0 0 max(60px, env(safe-area-inset-bottom));
+    }
+
+    .screen { display: none; width: 100%; max-width: 620px; padding: 52px 24px 32px; }
+    .screen.active { display: flex; flex-direction: column; align-items: center; }
+
+    /* ── LANDING ── */
+    /* ── LANDING ── */
+    #screen-landing { text-align: center; }
+
+    .logo-mark {
+      width: 84px; height: 84px;
+      border-radius: 50%;
+      background: conic-gradient(
+        var(--physical) 0deg 90deg,
+        var(--growth) 90deg 180deg,
+        var(--social) 180deg 270deg,
+        var(--work) 270deg 360deg
+      );
+      margin: 0 auto 28px;
+      position: relative;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.14);
+    }
+    .logo-mark::after {
+      content: '';
+      position: absolute;
+      inset: 11px;
+      border-radius: 50%;
+      background: var(--bg);
+    }
+
+    .landing-title {
+      font-size: 56px;
+      font-weight: 800;
+      letter-spacing: -3px;
+      margin-bottom: 12px;
+      line-height: 1;
+    }
+    .landing-sub {
+      font-size: 16px;
+      color: var(--muted);
+      line-height: 1.6;
+      max-width: 340px;
+      margin: 0 auto 14px;
+      font-weight: 400;
+    }
+    .landing-desc {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.75;
+      max-width: 400px;
+      margin: 0 auto 32px;
+      padding: 16px 20px;
+      background: var(--subtle);
+      border-radius: var(--r-lg);
+      text-align: left;
+    }
+
+    .categories-preview {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      width: 100%;
+      margin-bottom: 32px;
+    }
+    .cat-chip {
+      padding: 16px 16px;
+      border-radius: var(--r-md);
+      font-size: 13px;
+      font-weight: 700;
+      text-align: left;
+      color: #fff;
+    }
+    .cat-chip.physical { background: var(--physical); }
+    .cat-chip.growth   { background: var(--growth); }
+    .cat-chip.social   { background: var(--social); }
+    .cat-chip.work     { background: var(--work); }
+    .cat-chip small { display: block; font-size: 11px; font-weight: 400; opacity: 0.8; margin-top: 4px; }
+
+    .btn-primary {
+      background: var(--text);
+      color: #fff;
+      border: none;
+      padding: 16px 40px;
+      border-radius: var(--r-pill);
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s;
+      width: 100%;
+      max-width: 320px;
+      min-height: 54px;
+      letter-spacing: -0.2px;
+    }
+    .btn-primary:hover  { opacity: 0.85; }
+    .btn-primary:active { transform: scale(0.97); }
+
+    .btn-demo {
+      background: var(--subtle);
+      border: none;
+      color: var(--muted);
+      padding: 13px 28px;
+      border-radius: var(--r-pill);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background 0.15s, color 0.15s;
+      width: 100%;
+      max-width: 320px;
+      min-height: 50px;
+    }
+    .btn-demo:hover { background: #ebebeb; color: var(--text); }
+
+    /* ── QUESTION ── */
+    #screen-question { align-items: stretch; }
+
+    .progress-bar-wrap {
+      width: 100%;
+      height: 5px;
+      background: var(--border);
+      border-radius: var(--r-pill);
+      margin-bottom: 32px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: var(--r-pill);
+      transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .category-badge {
+      display: inline-flex;
+      align-items: center;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: var(--r-pill);
+      margin-bottom: 22px;
+      align-self: flex-start;
+    }
+    .badge-physical { background: var(--physical-light); color: var(--physical); }
+    .badge-growth   { background: var(--growth-light);   color: var(--growth);   }
+    .badge-social   { background: var(--social-light);   color: var(--social);   }
+    .badge-work     { background: var(--work-light);     color: var(--work);     }
+
+    .question-num  { font-size: 12px; color: #000; margin-bottom: 10px; font-weight: 500; }
+    .question-text { font-size: 24px; font-weight: 700; line-height: 1.3; margin-bottom: 10px; letter-spacing: -0.5px; }
+    .question-hint { font-size: 14px; color: var(--muted); margin-bottom: 36px; line-height: 1.55; }
+
+    .scale-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .scale-buttons {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 36px;
+    }
+    .scale-btn {
+      flex: 1;
+      aspect-ratio: 1;
+      border: 2px solid var(--border);
+      border-radius: var(--r-sm);
+      background: var(--subtle);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.14s;
+      color: #000;
+      padding: 0;
+    }
+    .scale-btn:hover {
+      background: #ebebeb;
+      border-color: #ccc;
+      color: var(--text);
+      transform: translateY(-1px);
+    }
+    .scale-btn.selected {
+      color: #fff !important;
+      border-color: transparent !important;
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px) scale(1.05);
+    }
+
+    .question-nav { display: flex; gap: 10px; }
+    .btn-back {
+      background: var(--subtle);
+      border: none;
+      color: var(--text);
+      padding: 14px 22px;
+      border-radius: var(--r-pill);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+      min-height: 54px;
+      min-width: 80px;
+    }
+    .btn-back:hover { background: #ebebeb; }
+    .btn-next {
+      flex: 1;
+      background: var(--text);
+      color: #fff;
+      border: none;
+      padding: 14px 22px;
+      border-radius: var(--r-pill);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s;
+      min-height: 54px;
+      letter-spacing: -0.2px;
+    }
+    .btn-next:hover  { opacity: 0.85; }
+    .btn-next:active { transform: scale(0.98); }
+    .btn-next:disabled { opacity: 0.25; cursor: not-allowed; transform: none; }
+
+    /* ── RESULTS ── */
+    #screen-results { align-items: stretch; }
+
+    .results-header { text-align: center; margin-bottom: 24px; }
+    .results-title  { font-size: 36px; font-weight: 800; letter-spacing: -2px; margin-bottom: 6px; }
+    .results-sub    { font-size: 14px; color: var(--muted); margin-bottom: 4px; }
+    .results-date   { font-size: 12px; color: #ccc; font-weight: 500; }
+
+#wheel-canvas {
+      display: block;
+      width: 100%;
+      max-width: 520px;
+      margin: 0 auto 20px;
+    }
+
+    .section-scores {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .section-card { padding: 20px 18px; border-radius: var(--r-lg); color: #fff; }
+    .section-card.physical { background: var(--physical); }
+    .section-card.growth   { background: var(--growth);   }
+    .section-card.social   { background: var(--social);   }
+    .section-card.work     { background: var(--work);     }
+
+    .section-card-name {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      margin-bottom: 8px; opacity: 0.85; color: #fff;
+    }
+    .section-card-score { font-size: 30px; font-weight: 300; color: #fff; }
+    .section-card-score span { font-size: 13px; opacity: 0.65; }
+
+    .divider { border: none; border-top: 1px solid var(--border); margin: 4px 0 24px; }
+
+    .focus-header { margin-bottom: 16px; }
+    .focus-title  { font-size: 18px; font-weight: 800; color: var(--text); margin-bottom: 4px; letter-spacing: -0.5px; }
+    .focus-sub    { font-size: 13px; color: var(--muted); }
+
+    .focus-card {
+      border-left: 4px solid;
+      background: var(--surface);
+      border-radius: 0 var(--r-md) var(--r-md) 0;
+      padding: 18px 20px;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow-sm);
+    }
+    .focus-card-top {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .focus-card-name  { font-size: 15px; font-weight: 700; letter-spacing: -0.3px; }
+    .focus-card-score {
+      font-size: 12px; font-weight: 700;
+      border-radius: var(--r-pill);
+      padding: 4px 11px; color: #fff;
+    }
+    .focus-card-reflect {
+      font-size: 13px; color: #555;
+      font-style: italic; line-height: 1.6;
+      margin-bottom: 14px;
+      padding: 12px 14px;
+      background: var(--subtle);
+      border-radius: var(--r-sm);
+    }
+    .focus-card-reflect::before { content: '"'; }
+    .focus-card-reflect::after  { content: '"'; }
+    .focus-ideas { list-style: none; padding: 0; margin: 0; }
+    .focus-ideas li {
+      font-size: 13px; color: var(--text);
+      line-height: 1.55; padding: 8px 0 8px 22px;
+      position: relative; border-bottom: 1px solid var(--border);
+    }
+    .focus-ideas li:last-child { border-bottom: none; }
+    .focus-ideas li::before {
+      content: '→';
+      position: absolute; left: 0;
+      color: var(--muted); font-size: 12px; top: 9px;
+    }
+
+    .score-bars { margin-bottom: 28px; }
+    .score-bar-item { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+    .score-bar-label {
+      font-size: 12px; color: var(--muted); font-weight: 500;
+      width: 130px; flex-shrink: 0;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .score-bar-track { flex: 1; height: 6px; background: var(--border); border-radius: var(--r-pill); overflow: hidden; }
+    .score-bar-fill  { height: 100%; border-radius: var(--r-pill); }
+    .score-bar-val   { font-size: 12px; font-weight: 700; width: 18px; text-align: right; }
+
+    .results-actions { display: flex; gap: 10px; justify-content: center; }
+    .btn-restart {
+      background: var(--subtle); border: none;
+      color: var(--text); padding: 13px 24px;
+      border-radius: var(--r-pill); font-size: 14px; font-weight: 600; cursor: pointer;
+      transition: background 0.15s; min-height: 50px;
+    }
+    .btn-restart:hover { background: #ebebeb; }
+    .btn-save {
+      background: var(--text); color: #fff; border: none;
+      padding: 13px 28px; border-radius: var(--r-pill);
+      font-size: 14px; font-weight: 700; cursor: pointer;
+      transition: opacity 0.15s; min-height: 50px; letter-spacing: -0.2px;
+    }
+    .btn-save:hover { opacity: 0.85; }
+
+    /* ── MOBILE ── */
+    @media (max-width: 540px) {
+      .screen { padding: 36px 16px 20px; }
+
+      .logo-mark { width: 68px; height: 68px; margin-bottom: 20px; }
+      .landing-title { font-size: 44px; letter-spacing: -2.5px; }
+      .landing-sub   { font-size: 15px; }
+      .landing-desc  { font-size: 13px; padding: 14px 16px; }
+      .categories-preview { gap: 6px; margin-bottom: 24px; }
+      .cat-chip { padding: 13px 13px; font-size: 12px; }
+
+      .question-text { font-size: 20px; }
+      .question-hint { margin-bottom: 24px; }
+      .progress-bar-wrap { margin-bottom: 24px; }
+
+      .scale-buttons {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 7px;
+        margin-bottom: 28px;
+      }
+      .scale-btn { aspect-ratio: 1; min-height: 54px; font-size: 16px; border-radius: 12px; }
+      .scale-btn.selected { transform: scale(1.03); }
+
+      .results-title { font-size: 28px; }
+      .section-card-score { font-size: 26px; }
+      .score-bar-label { width: 100px; font-size: 11px; }
+.focus-card { padding: 14px 15px; }
+      .focus-card-reflect { font-size: 12px; }
+      .focus-ideas li { font-size: 12px; }
+
+      .results-actions { flex-direction: column; gap: 8px; }
+      .btn-restart, .btn-save { width: 100%; text-align: center; min-height: 52px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- LANDING -->
+<div class="screen active" id="screen-landing">
+  <div class="logo-mark"></div>
+  <h1 class="landing-title">Balance</h1>
+  <p class="landing-sub">Rate 22 areas of your life on a scale of 1–10 and discover your personal life wheel.</p>
+  <p class="landing-desc">This assessment helps you discover which areas of your life need more attention. A balanced life — across health, relationships, work, and personal growth — is the foundation of a truly fulfilled one.</p>
+  <div class="categories-preview">
+    <div class="cat-chip physical">🌿 Physical &amp; Spiritual<small>5 questions</small></div>
+    <div class="cat-chip growth">🌱 Personal Growth<small>5 questions</small></div>
+    <div class="cat-chip social">💛 Social Relationships<small>7 questions</small></div>
+    <div class="cat-chip work">💼 Work &amp; Financial<small>5 questions</small></div>
+  </div>
+  <button class="btn-primary" onclick="startQuiz()">Begin — takes ~3 minutes</button>
+  <button class="btn-demo" onclick="showDemo()">Preview example wheel</button>
+</div>
+
+<!-- QUESTION -->
+<div class="screen" id="screen-question">
+  <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-fill"></div></div>
+  <div class="category-badge" id="q-badge"></div>
+  <div class="question-num"  id="q-num"></div>
+  <div class="question-text" id="q-text"></div>
+  <div class="question-hint" id="q-hint"></div>
+  <div class="scale-labels"><span>Not at all / Poor</span><span>Excellent / Fully</span></div>
+  <div class="scale-buttons" id="scale-buttons"></div>
+  <div class="question-nav">
+    <button class="btn-back" id="btn-back" onclick="prevQuestion()">← Back</button>
+    <button class="btn-next" id="btn-next" onclick="nextQuestion()" disabled>Continue →</button>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div class="screen" id="screen-results">
+  <div class="results-header">
+    <h2 class="results-title">Your Life Wheel</h2>
+    <p class="results-sub">A snapshot of where you are today</p>
+    <p class="results-date" id="results-date"></p>
+  </div>
+  <canvas id="wheel-canvas"></canvas>
+<div class="section-scores" id="section-scores"></div>
+  <hr class="divider">
+  <div class="focus-header">
+    <div class="focus-title">🔍 3 Areas to Focus On</div>
+    <div class="focus-sub">Your lowest scores — with ideas for reflection and growth</div>
+  </div>
+  <div id="focus-areas"></div>
+  <hr class="divider">
+  <div class="score-bars" id="score-bars"></div>
+  <div class="results-actions">
+    <button class="btn-restart" onclick="restart()">Start over</button>
+    <button class="btn-save"    onclick="saveChart()">Save as image</button>
+  </div>
+</div>
+
+<script>
+/* ─────────────── DATA ─────────────── */
+const CATS = [
+  {
+    id: 'physical', short: 'Physical & Spiritual',
+    color: '#14b8a6', light: '#ccfbf1', badge: 'badge-physical',
+    qs: [
+      { text: 'How regularly are you getting physical exercise?',              hint: 'Think about the past 2–4 weeks.',                                        label: 'Exercise'       },
+      { text: 'How satisfied are you with your sleep patterns?',               hint: 'Quality, consistency and amount of sleep.',                              label: 'Sleep'          },
+      { text: 'How healthy are your eating habits?',                           hint: 'Nutrition, regularity, and balance.',                                    label: 'Eating'         },
+      { text: 'How much regular quiet or rest time do you have?',              hint: 'Stillness, meditation, or calm moments.',                                label: 'Quiet time'     },
+      { text: 'How much effort are you putting into your spiritual development?', hint: 'Faith, mindfulness, or inner growth — whatever resonates.',           label: 'Spirituality'   },
+    ]
+  },
+  {
+    id: 'growth', short: 'Personal Growth',
+    color: '#a855f7', light: '#f3e8ff', badge: 'badge-growth',
+    qs: [
+      { text: 'How much time are you making for fun and enjoyment?',           hint: 'Play, leisure, and activities that bring you joy.',                      label: 'Fun'            },
+      { text: 'How much effort are you putting into self-care and personal development?', hint: 'Learning, growth, therapy, reflection.',                      label: 'Self-care'      },
+      { text: 'How engaged are you with hobbies or interests outside work and family?', hint: 'Creative outlets, passions, side projects.',                    label: 'Hobbies'        },
+      { text: 'How would you rate your communication skills recently?',         hint: 'Expressing yourself clearly and listening well.',                       label: 'Communication'  },
+      { text: 'How comfortable are you saying "no" when needed?',              hint: 'Setting boundaries and protecting your time and energy.',                label: 'Say no'         },
+    ]
+  },
+  {
+    id: 'social', short: 'Social Relationships',
+    color: '#f43f5e', light: '#ffe4e6', badge: 'badge-social',
+    qs: [
+      { text: 'How satisfied are you with your relationship or life partnership?', hint: 'If not applicable, rate how you feel about this area generally.',    label: 'Partnership'    },
+      { text: 'How connected do you feel to your children?',                   hint: 'If you don\'t have children, rate how you feel about this area.',        label: 'Children'       },
+      { text: 'How are your relationships with in-laws?',                      hint: 'If not applicable, rate family-by-connection relationships generally.',  label: 'In-laws'        },
+      { text: 'How connected do you feel to your nuclear family?',             hint: 'Parents, siblings, your immediate household.',                           label: 'Nuclear family' },
+      { text: 'How connected are you to your extended family?',                hint: 'Grandparents, cousins, aunts, uncles.',                                  label: 'Extended family'},
+      { text: 'How satisfied are you with your friendships?',                  hint: 'Quality, depth, and regularity of connection.',                          label: 'Friends'        },
+      { text: 'How fulfilled are your other social connections?',              hint: 'Colleagues, neighbours, community, acquaintances.',                      label: 'Social life'    },
+    ]
+  },
+  {
+    id: 'work', short: 'Work & Financial',
+    color: '#4f6ef7', light: '#e0e7ff', badge: 'badge-work',
+    qs: [
+      { text: 'How satisfied are you with your job or career?',                hint: 'Purpose, role, trajectory, and day-to-day enjoyment.',                  label: 'Job / Career'   },
+      { text: 'How satisfied are you with your income?',                       hint: 'Whether it meets your needs and goals.',                                 label: 'Income'         },
+      { text: 'How well are you managing work-related stress?',                hint: '10 = very little stress, or managing it very well.',                     label: 'Work stress'    },
+      { text: 'How in control do you feel of your money management?',          hint: 'Budgeting, savings, and spending habits.',                               label: 'Money'          },
+      { text: 'How satisfied are you with your qualifications and skills development?', hint: 'Career learning, certifications, training.',                    label: 'Skills'         },
+    ]
+  }
+];
+
+// Flatten into a single ordered array
+const QUESTIONS = [];
+CATS.forEach(cat => cat.qs.forEach((q, li) => QUESTIONS.push({ ...q, cat, li })));
+
+/* ─────────────── STATE ─────────────── */
+let current = 0;
+let answers = new Array(QUESTIONS.length).fill(null);
+
+/* ─────────────── NAVIGATION ─────────────── */
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// Realistic-feeling demo scores (not all high — shows the wheel's shape nicely)
+const DEMO_SCORES = [7, 5, 6, 4, 3, 8, 6, 7, 7, 5, 6, 4, 3, 7, 8, 9, 5, 8, 4, 6, 5, 7];
+
+function showDemo() {
+  answers = [...DEMO_SCORES];
+  showResults();
+}
+
+function startQuiz() {
+  current = 0;
+  answers = new Array(QUESTIONS.length).fill(null);
+  renderQuestion();
+  showScreen('screen-question');
+}
+
+function renderQuestion() {
+  const q   = QUESTIONS[current];
+  const cat = q.cat;
+  const n   = QUESTIONS.length;
+
+  // Progress bar
+  const fill = document.getElementById('progress-fill');
+  fill.style.width      = ((current / n) * 100) + '%';
+  fill.style.background = cat.color;
+
+  // Badge, number, text, hint
+  const badge = document.getElementById('q-badge');
+  badge.textContent = cat.short;
+  badge.className   = 'category-badge ' + cat.badge;
+
+  document.getElementById('q-num').textContent  = `Question ${current + 1} of ${n}`;
+  document.getElementById('q-text').textContent = q.text;
+  document.getElementById('q-hint').textContent = q.hint;
+
+  // Scale buttons
+  const wrap = document.getElementById('scale-buttons');
+  wrap.innerHTML = '';
+  for (let i = 1; i <= 10; i++) {
+    const btn = document.createElement('button');
+    btn.className   = 'scale-btn';
+    btn.textContent = i;
+    const isSelected = answers[current] === i;
+    if (isSelected) {
+      btn.classList.add('selected');
+      btn.style.background  = cat.color;
+      btn.style.borderColor = cat.color;
+    }
+    btn.addEventListener('click', () => selectAnswer(i));
+    wrap.appendChild(btn);
+  }
+
+  document.getElementById('btn-back').style.display = current === 0 ? 'none' : '';
+  const nextBtn = document.getElementById('btn-next');
+  nextBtn.disabled    = answers[current] === null;
+  nextBtn.textContent = current === n - 1 ? 'See my results →' : 'Continue →';
+}
+
+function selectAnswer(val) {
+  answers[current] = val;
+  const color = QUESTIONS[current].cat.color;
+  document.querySelectorAll('.scale-btn').forEach((btn, idx) => {
+    if (idx + 1 === val) {
+      btn.classList.add('selected');
+      btn.style.background = color; btn.style.borderColor = color; btn.style.color = '';
+    } else {
+      btn.classList.remove('selected');
+      btn.style.background = ''; btn.style.borderColor = '#e8e8e4'; btn.style.color = '';
+    }
+  });
+  document.getElementById('btn-next').disabled = false;
+}
+
+function nextQuestion() {
+  if (answers[current] === null) return;
+  if (current < QUESTIONS.length - 1) { current++; renderQuestion(); }
+  else { showResults(); }
+}
+
+function prevQuestion() {
+  if (current > 0) { current--; renderQuestion(); }
+  else { showScreen('screen-landing'); }
+}
+
+/* ─────────────── RESULTS ─────────────── */
+function showResults() {
+  // Set timestamp
+  const now = new Date();
+  const dateStr = now.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  document.getElementById('results-date').textContent = dateStr;
+
+  showScreen('screen-results');
+  // Give the browser a frame to layout the visible screen before drawing
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    drawWheel();
+    renderSectionCards();
+    renderFocusAreas();
+    renderScoreBars();
+  }));
+}
+
+function restart() {
+  current = 0;
+  answers = new Array(QUESTIONS.length).fill(null);
+  showScreen('screen-landing');
+}
+
+/* ─────────────── WHEEL (pure canvas) ─────────────── */
+
+// Display order: growth → social → work → physical (clockwise from top-right)
+function buildDisplayList() {
+  // Indices in QUESTIONS array per category (physical=0-4, growth=5-9, social=10-16, work=17-21)
+  const idxGrowth   = [5,6,7,8,9];
+  const idxSocial   = [10,11,12,13,14,15,16];
+  const idxWork     = [17,18,19,20,21];
+  const idxPhysical = [0,1,2,3,4];
+  return [...idxGrowth, ...idxSocial, ...idxWork, ...idxPhysical].map(i => ({
+    q: QUESTIONS[i],
+    val: answers[i] || 0,
+    idx: i
+  }));
+}
+
+
+function drawWheel() {
+  const canvas = document.getElementById('wheel-canvas');
+  const dpr    = window.devicePixelRatio || 1;
+  const cssW   = Math.min(canvas.parentElement.offsetWidth, 520);
+  canvas.width  = cssW * dpr;
+  canvas.height = cssW * dpr;
+  canvas.style.width  = cssW + 'px';
+  canvas.style.height = cssW + 'px';
+
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  const W  = cssW;
+  const cx = W / 2;
+  const cy = W / 2;
+
+  // The wheel sits inside a circle; labels live in the outer band
+  const labelBand = W * 0.175;   // px reserved around the wheel for labels
+  const maxR      = W / 2 - labelBand;
+  const labelR    = maxR + W * 0.025; // where label anchor starts
+
+  const items = buildDisplayList();
+  const n     = items.length;   // 22
+  const step  = (2 * Math.PI) / n;
+  const start = -Math.PI / 2;   // top
+
+  ctx.clearRect(0, 0, W, W);
+
+  // Helper: hex color → rgba string
+  function hexRgba(hex, alpha) {
+    const r = parseInt(hex.slice(1,3),16);
+    const g = parseInt(hex.slice(3,5),16);
+    const b = parseInt(hex.slice(5,7),16);
+    return `rgba(${r},${g},${b},${alpha})`;
+  }
+
+  // ── Category sector fills (inside the wheel area only) ──
+  const catRanges = [
+    { catId: 'growth',   from: 0,  to: 4  },
+    { catId: 'social',   from: 5,  to: 11 },
+    { catId: 'work',     from: 12, to: 16 },
+    { catId: 'physical', from: 17, to: 21 },
+  ];
+  const cat4 = Object.fromEntries(CATS.map(c => [c.id, c]));
+
+  catRanges.forEach(({ catId, from, to }) => {
+    const a1 = start + from * step;
+    const a2 = start + to   * step;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, maxR, a1, a2);
+    ctx.closePath();
+    ctx.fillStyle = hexRgba(cat4[catId].color, 0.10);
+    ctx.fill();
+  });
+
+  // ── Concentric rings ──
+  for (let ring = 1; ring <= 10; ring++) {
+    const r = (ring / 10) * maxR;
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, 2 * Math.PI);
+    ctx.strokeStyle = ring === 10 ? '#c8c8c2' : '#eaeae6';
+    ctx.lineWidth   = ring === 10 ? 1.2 : 0.6;
+    ctx.stroke();
+  }
+
+  // ── Ring number labels ──
+  const tickSz = Math.max(8, W * 0.022);
+  ctx.font         = `${tickSz}px sans-serif`;
+  ctx.fillStyle    = '#c0c0ba';
+  ctx.textAlign    = 'center';
+  ctx.textBaseline = 'middle';
+  [2, 4, 6, 8, 10].forEach(v => {
+    const r = (v / 10) * maxR;
+    ctx.fillText(v, cx + 2, cy - r + tickSz * 0.55);
+  });
+
+  // ── Spokes ──
+  items.forEach((_, i) => {
+    const angle = start + i * step;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + Math.cos(angle) * maxR, cy + Math.sin(angle) * maxR);
+    ctx.strokeStyle = '#ddddd8';
+    ctx.lineWidth   = 0.8;
+    ctx.stroke();
+  });
+
+  // ── Score polygon — compute points ──
+  const pts = items.map((item, i) => {
+    const r = (item.val / 10) * maxR;
+    const a = start + i * step;
+    return [cx + Math.cos(a) * r, cy + Math.sin(a) * r];
+  });
+
+  // ── Per-category colored fills (each wedge from center → polygon segment → center) ──
+  const catFills = [
+    { catId: 'growth',   from: 0,  to: 4  },
+    { catId: 'social',   from: 5,  to: 11 },
+    { catId: 'work',     from: 12, to: 16 },
+    { catId: 'physical', from: 17, to: 21 },
+  ];
+  catFills.forEach(({ catId, from, to }) => {
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    for (let i = from; i <= to; i++) {
+      ctx.lineTo(pts[i][0], pts[i][1]);
+    }
+    ctx.closePath();
+    ctx.fillStyle = hexRgba(cat4[catId].color, 0.18);
+    ctx.fill();
+  });
+
+  // ── Polygon outline ──
+  ctx.beginPath();
+  pts.forEach(([x, y], i) => i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y));
+  ctx.closePath();
+  ctx.strokeStyle = 'rgba(0,0,0,0.55)';
+  ctx.lineWidth   = 1.6;
+  ctx.stroke();
+
+  // ── Dots ──
+  items.forEach((item, i) => {
+    const r = (item.val / 10) * maxR;
+    const a = start + i * step;
+    ctx.beginPath();
+    ctx.arc(cx + Math.cos(a) * r, cy + Math.sin(a) * r, 3.8, 0, 2 * Math.PI);
+    ctx.fillStyle   = item.q.cat.color;
+    ctx.fill();
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth   = 1.6;
+    ctx.stroke();
+  });
+
+  // ── Spoke labels (short, single line, anchored per quadrant) ──
+  const fs = Math.max(9, W * 0.024);
+  ctx.font         = `500 ${fs}px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif`;
+  ctx.textBaseline = 'middle';
+
+  items.forEach((item, i) => {
+    const angle = start + i * step;
+    const cosA  = Math.cos(angle);
+    const sinA  = Math.sin(angle);
+    const lx    = cx + cosA * labelR;
+    const ly    = cy + sinA * labelR;
+
+    // Horizontal anchor
+    if      (cosA >  0.2) ctx.textAlign = 'left';
+    else if (cosA < -0.2) ctx.textAlign = 'right';
+    else                  ctx.textAlign = 'center';
+
+    // Vertical anchor — push label away from rim
+    const lineH = fs * 1.3;
+    let   ty    = ly;
+    if      (sinA < -0.2) ty = ly - fs * 0.3;
+    else if (sinA >  0.2) ty = ly + fs * 0.3;
+
+    // Two-word labels split into 2 lines only if > 10 chars
+    const label = item.q.label;
+    const words = label.split(' ');
+    let lines;
+    if (label.length > 10 && words.length >= 2) {
+      const m = Math.ceil(words.length / 2);
+      lines = [words.slice(0, m).join(' '), words.slice(m).join(' ')];
+    } else {
+      lines = [label];
+    }
+
+    ctx.fillStyle = item.q.cat.color;
+    if (lines.length === 1) {
+      ctx.fillText(lines[0], lx, ty);
+    } else {
+      ctx.fillText(lines[0], lx, ty - lineH * 0.5);
+      ctx.fillText(lines[1], lx, ty + lineH * 0.5);
+    }
+  });
+}
+
+/* ─────────────── REFLECTIONS DATA ─────────────── */
+// Keyed by question index in QUESTIONS array (physical 0-4, growth 5-9, social 10-16, work 17-21)
+const REFLECTIONS = {
+  0: { // Exercise
+    reflect: 'When did you last feel really good in your body after moving? What made it easy back then?',
+    ideas: [
+      'Start small — even a 10-minute walk daily builds the habit before intensity',
+      'Schedule exercise like a meeting: pick a fixed slot and protect it',
+    ]
+  },
+  1: { // Sleep
+    reflect: 'What would be the first thing you\'d notice if you were consistently well-rested?',
+    ideas: [
+      'Set a consistent bedtime and wake time, even on weekends — regularity matters most',
+      'Create a 20-minute wind-down ritual before bed (dim lights, no screens, something calming)',
+    ]
+  },
+  2: { // Eating
+    reflect: 'What does eating feel like when it\'s truly nourishing rather than just convenient?',
+    ideas: [
+      'Prep one batch of healthy food per week so good choices are always within reach',
+      'Eat one meal a day without your phone — notice how hunger and fullness actually feel',
+    ]
+  },
+  3: { // Quiet time
+    reflect: 'When did you last feel genuinely rested in your mind, not just your body?',
+    ideas: [
+      'Block 10 minutes each morning before the day starts — no agenda, just stillness',
+      'Try sitting outside with no headphones once a day — let your mind wander freely',
+    ]
+  },
+  4: { // Spirituality
+    reflect: 'What gives you a sense of meaning or connection that goes beyond your daily to-do list?',
+    ideas: [
+      'Journal for 5 minutes on what matters most to you and why — revisit it weekly',
+      'Explore one community, ritual, or practice that connects you to something larger',
+    ]
+  },
+  5: { // Fun
+    reflect: 'What did you love doing as a child that you\'ve quietly stopped making time for?',
+    ideas: [
+      'Block one evening per week and label it "mine" — protect it like any other commitment',
+      'Make a list of 5 things that make you laugh or feel alive, then do one this week',
+    ]
+  },
+  6: { // Self-care
+    reflect: 'Are you pouring from an empty cup? What would feeling genuinely full look like for you?',
+    ideas: [
+      'Identify one thing you need more of right now (rest, space, connection) and ask for it',
+      'Treat self-care appointments the same as work meetings — non-negotiable, in the calendar',
+    ]
+  },
+  7: { // Hobbies
+    reflect: 'Is there something you keep saying "I\'d love to do that" — but never actually start?',
+    ideas: [
+      'Sign up for one class, workshop, or meetup around something you\'ve been curious about',
+      'Set aside 30 minutes this weekend for a hobby with no goal — just explore and play',
+    ]
+  },
+  8: { // Communication
+    reflect: 'Is there something important you\'ve been meaning to say to someone but haven\'t?',
+    ideas: [
+      'Practice saying one difficult thing this week, starting in a low-stakes conversation',
+      'Ask one trusted person for honest feedback on how you come across — then just listen',
+    ]
+  },
+  9: { // Say no
+    reflect: 'What\'s one thing on your plate right now that you said yes to but wish you hadn\'t?',
+    ideas: [
+      'Before agreeing to anything new, pause and say "let me check and get back to you"',
+      'Keep a simple script ready: "I can\'t commit to that right now, but thank you for asking"',
+    ]
+  },
+  10: { // Partnership
+    reflect: 'When did you last feel truly connected with your partner — and what made that possible?',
+    ideas: [
+      'Schedule an intentional evening together this week — phones away, no agenda',
+      'Share one appreciation and one need with your partner in a calm, low-pressure moment',
+    ]
+  },
+  11: { // Children
+    reflect: 'What do your children most need from you lately that\'s been hard to give?',
+    ideas: [
+      'Set aside 20 minutes of fully undivided, child-led time each day — follow their lead',
+      'Tell each child three specific things you love about them — say it out loud this week',
+    ]
+  },
+  12: { // In-laws
+    reflect: 'Is the distance here about unresolved tension, or simply busyness? What would "good enough" look like?',
+    ideas: [
+      'Find one small, low-pressure way to connect — a short call, a meal, a shared interest',
+      'Have an honest conversation with your partner about what you both need in this relationship',
+    ]
+  },
+  13: { // Nuclear family
+    reflect: 'Do the people closest to you actually know how you\'re really doing right now?',
+    ideas: [
+      'Reach out to one family member this week just to check in — no agenda, just connection',
+      'Share something honest about your life and invite real conversation in return',
+    ]
+  },
+  14: { // Extended family
+    reflect: 'Is the gap here created by distance, time, or something emotional that\'s gone unaddressed?',
+    ideas: [
+      'Send a voice note or short message to a relative you haven\'t spoken to in a while',
+      'Suggest something simple — a video call, a shared meal — small gestures often mean the most',
+    ]
+  },
+  15: { // Friends
+    reflect: 'Who is a friend you miss? What got in the way of staying close?',
+    ideas: [
+      'Send a message to one friend today — even "thinking of you" is enough to restart things',
+      'Suggest a recurring plan (monthly dinner, weekly walk) so staying in touch doesn\'t rely on spontaneity',
+    ]
+  },
+  16: { // Social life
+    reflect: 'Do you feel genuinely seen and valued in your everyday social world?',
+    ideas: [
+      'Join one group, class, or community built around something you actually care about',
+      'Say yes to the next social invitation, even if staying home feels easier in the moment',
+    ]
+  },
+  17: { // Job / Career
+    reflect: 'What would make work feel more meaningful to you — a new project, a change in direction, or something else?',
+    ideas: [
+      'Have an honest conversation with your manager about your goals, growth, and what excites you',
+      'Identify one part of your role you can take more ownership of this month and run with it',
+    ]
+  },
+  18: { // Income
+    reflect: 'Is this a gap between income and needs, income and goals, or income and values?',
+    ideas: [
+      'Review what\'s coming in vs. going out — where\'s the biggest gap or opportunity?',
+      'Research one concrete step: a raise conversation, a new skill to monetise, or a career move',
+    ]
+  },
+  19: { // Work stress
+    reflect: 'What\'s the single biggest source of stress at work right now — and how much of it is in your control?',
+    ideas: [
+      'Identify one boundary you can set this week: a finish time, email hours, or meeting limits',
+      'Build a short decompression ritual between work and home — even 10 minutes of transition helps',
+    ]
+  },
+  20: { // Money
+    reflect: 'Does your current spending actually reflect what matters most to you?',
+    ideas: [
+      'Track every expense for one week — awareness alone often shifts behaviour',
+      'Set one small, specific financial goal (e.g. save a fixed amount by a date) and automate it',
+    ]
+  },
+  21: { // Skills
+    reflect: 'What skill, if you genuinely developed it, would open the most doors for you?',
+    ideas: [
+      'Dedicate 20 focused minutes a day to one specific skill for the next 30 days',
+      'Find a mentor, course, or podcast in the area you want to grow — start this week',
+    ]
+  },
+};
+
+/* ─────────────── FOCUS AREAS ─────────────── */
+function renderFocusAreas() {
+  const wrap = document.getElementById('focus-areas');
+  wrap.innerHTML = '';
+
+  // Sort all questions by score ascending, pick lowest 3
+  const ranked = QUESTIONS
+    .map((q, i) => ({ q, i, val: answers[i] || 0 }))
+    .sort((a, b) => a.val - b.val)
+    .slice(0, 3);
+
+  ranked.forEach(({ q, i, val }, rank) => {
+    const ref  = REFLECTIONS[i];
+    const card = document.createElement('div');
+    card.className = 'focus-card';
+    card.style.borderColor = q.cat.color;
+
+    const rankEmoji = ['🥇', '🥈', '🥉'][rank].replace('🥇','1.').replace('🥈','2.').replace('🥉','3.');
+
+    card.innerHTML = `
+      <div class="focus-card-top">
+        <div class="focus-card-name" style="color:${q.cat.color}">${rank + 1}. ${q.label}</div>
+        <div class="focus-card-score" style="background:${q.cat.color}">${val} / 10</div>
+      </div>
+      <div class="focus-card-reflect">${ref.reflect}</div>
+      <ul class="focus-ideas">
+        ${ref.ideas.map(idea => `<li>${idea}</li>`).join('')}
+      </ul>
+    `;
+    wrap.appendChild(card);
+  });
+}
+
+/* ─────────────── SECTION CARDS ─────────────── */
+function catAvg(catId) {
+  const vals = QUESTIONS.map((q, i) => q.cat.id === catId ? (answers[i] || 0) : null).filter(v => v !== null);
+  return (vals.reduce((a, b) => a + b, 0) / vals.length).toFixed(1);
+}
+
+function renderSectionCards() {
+  const wrap = document.getElementById('section-scores');
+  wrap.innerHTML = '';
+  CATS.forEach(cat => {
+    const avg  = catAvg(cat.id);
+    const card = document.createElement('div');
+    card.className = `section-card ${cat.id}`;
+    card.innerHTML = `<div class="section-card-name">${cat.short}</div>
+                      <div class="section-card-score">${avg}<span> / 10</span></div>`;
+    wrap.appendChild(card);
+  });
+}
+
+/* ─────────────── SCORE BARS ─────────────── */
+function renderScoreBars() {
+  const wrap = document.getElementById('score-bars');
+  wrap.innerHTML = '';
+  QUESTIONS.forEach((q, i) => {
+    const val   = answers[i] || 0;
+    const row   = document.createElement('div');
+    row.className = 'score-bar-item';
+    row.innerHTML = `
+      <div class="score-bar-label" title="${q.text}">${q.label}</div>
+      <div class="score-bar-track">
+        <div class="score-bar-fill" style="width:${val*10}%;background:${q.cat.color}"></div>
+      </div>
+      <div class="score-bar-val" style="color:${q.cat.color}">${val}</div>`;
+    wrap.appendChild(row);
+  });
+}
+
+/* ─────────────── SAVE ─────────────── */
+
+// Returns array of wrapped lines for a given max width
+function wrapLines(ctx, text, maxW) {
+  const words = text.split(' ');
+  let line = '', lines = [];
+  for (const w of words) {
+    const test = line ? line + ' ' + w : w;
+    if (ctx.measureText(test).width > maxW && line) { lines.push(line); line = w; }
+    else line = test;
+  }
+  if (line) lines.push(line);
+  return lines;
+}
+
+// Draw text wrapped, return total height consumed
+function drawWrapped(ctx, text, x, y, maxW, lineH) {
+  const lines = wrapLines(ctx, text, maxW);
+  lines.forEach((l, i) => ctx.fillText(l, x, y + i * lineH));
+  return lines.length * lineH;
+}
+
+// Rounded rect path helper
+function rrect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y,     x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x,     y + h, r);
+  ctx.arcTo(x,     y + h, x,     y,     r);
+  ctx.arcTo(x,     y,     x + w, y,     r);
+  ctx.closePath();
+}
+
+function saveChart() {
+  const src      = document.getElementById('wheel-canvas');
+  const dpr      = window.devicePixelRatio || 1;
+  const dateText = document.getElementById('results-date').textContent;
+
+  const cssW     = src.width / dpr;
+  const wheelH   = src.height / dpr;
+  const pad      = 24;
+  const innerW   = cssW - pad * 2;
+  const SYS      = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial";
+  const LH       = 18; // default line height for body text
+
+  // Font helpers
+  const fnt = (sz, wt = '400', style = '') =>
+    `${style} ${wt} ${sz}px ${SYS}, sans-serif`.trim();
+
+  // ── First pass: measure everything to get total height ──
+  // We draw to a temporary large canvas just for measurement
+  const tmp = document.createElement('canvas');
+  tmp.width = cssW * dpr; tmp.height = 1;
+  const mCtx = tmp.getContext('2d');
+  mCtx.scale(dpr, dpr);
+
+  const ranked = QUESTIONS
+    .map((q, i) => ({ q, i, val: answers[i] || 0 }))
+    .sort((a, b) => a.val - b.val).slice(0, 3);
+
+  // Measure each focus card height
+  function measureCard(item) {
+    const ref = REFLECTIONS[item.i];
+    const textW = innerW - 26;
+    mCtx.font = fnt(12, '400', 'italic');
+    const reflectLines = wrapLines(mCtx, '“' + ref.reflect + '”', textW - 20);
+    mCtx.font = fnt(12);
+    const idea1Lines = wrapLines(mCtx, ref.ideas[0], textW - 16);
+    const idea2Lines = wrapLines(mCtx, ref.ideas[1], textW - 16);
+    const h = 14                              // top pad
+      + 20                                   // name row
+      + 10                                   // gap
+      + (reflectLines.length * LH) + 20      // reflect box (content + padding)
+      + 10                                   // gap
+      + (idea1Lines.length * LH) + 8         // idea 1
+      + 1 + 8                                // divider
+      + (idea2Lines.length * LH) + 8         // idea 2
+      + 14;                                  // bottom pad
+    return Math.max(h, 110);
+  }
+
+  const cardHeights = ranked.map(measureCard);
+
+  // Total height
+  const totalH = Math.ceil(
+    28 + 38 + 24           // header
+    + wheelH + 8           // wheel
+    + 1 + 24               // divider
+    + 20 + 16              // scores section label
+    + 68 + 10 + 68         // 2 rows of score cards + gap
+    + 20 + 1 + 24          // gap + divider
+    + 20 + 16 + 24         // focus section label + subtitle
+    + cardHeights.reduce((a, b) => a + b + 12, 0)
+    + 32                   // bottom pad
+  );
+
+  // ── Draw canvas ──
+  const off = document.createElement('canvas');
+  off.width  = cssW * dpr;
+  off.height = totalH * dpr;
+  const ctx  = off.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  // Background
+  ctx.fillStyle = '#fafaf8';
+  ctx.fillRect(0, 0, cssW, totalH);
+
+  let y = 0;
+
+  // ── Header ──
+  y += 28;
+  ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+  ctx.fillStyle = '#1a1a18';
+  ctx.font = fnt(28, '300');
+  ctx.fillText('Your Life Wheel', cssW / 2, y);
+  y += 38;
+  ctx.fillStyle = '#aaaaaa';
+  ctx.font = fnt(13);
+  ctx.fillText(dateText, cssW / 2, y);
+  y += 24;
+
+  // ── Wheel ──
+  ctx.drawImage(src, 0, y, cssW, wheelH);
+  y += wheelH + 8;
+
+  // ── Divider ──
+  const drawDivider = () => {
+    ctx.strokeStyle = '#e8e8e4'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(pad, y); ctx.lineTo(cssW - pad, y); ctx.stroke();
+    y += 24;
+  };
+  drawDivider();
+
+  // ── Section averages ──
+  ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+  ctx.fillStyle = '#aaaaaa';
+  ctx.font = fnt(10, '700');
+  ctx.fillText('AVERAGE SCORES', pad, y);
+  y += 16;
+
+  const scoreCardW = (innerW - 10) / 2;
+  const scoreCardH = 68;
+
+  CATS.forEach((cat, i) => {
+    const col = i % 2, row = Math.floor(i / 2);
+    const cx = pad + col * (scoreCardW + 10);
+    const cy = y + row * (scoreCardH + 10);
+    const avg = catAvg(cat.id);
+
+    rrect(ctx, cx, cy, scoreCardW, scoreCardH, 10);
+    ctx.fillStyle = cat.light; ctx.fill();
+
+    ctx.fillStyle = cat.color;
+    ctx.font = fnt(9, '700');
+    ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+    ctx.fillText(cat.short.toUpperCase(), cx + 14, cy + 12);
+
+    ctx.fillStyle = '#1a1a18';
+    ctx.font = fnt(26, '300');
+    ctx.fillText(avg, cx + 14, cy + 26);
+
+    ctx.fillStyle = '#aaaaaa';
+    ctx.font = fnt(12);
+    ctx.save();
+    ctx.font = fnt(26, '300');
+    const sw = ctx.measureText(avg).width;
+    ctx.restore();
+    ctx.font = fnt(12);
+    ctx.textBaseline = 'top';
+    ctx.fillText('/ 10', cx + 14 + sw + 4, cy + 36);
+  });
+
+  y += 2 * scoreCardH + 10 + 20;
+  drawDivider();
+
+  // ── Focus areas ──
+  ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+  ctx.fillStyle = '#1a1a18';
+  ctx.font = fnt(14, '600');
+  ctx.fillText('3 Areas to Focus On', pad, y);
+  y += 20;
+  ctx.fillStyle = '#aaaaaa';
+  ctx.font = fnt(12);
+  ctx.fillText('Your lowest scores — with ideas for reflection and growth', pad, y);
+  y += 24;
+
+  ranked.forEach(({ q, i, val }, rank) => {
+    const ref     = REFLECTIONS[i];
+    const textX   = pad + 18;
+    const textW   = innerW - 26;
+    const cardH   = cardHeights[rank];
+    const cardX   = pad;
+
+    // Card background
+    rrect(ctx, cardX + 3, y, innerW - 3, cardH, 10);
+    ctx.fillStyle = '#ffffff'; ctx.fill();
+    ctx.strokeStyle = '#eeeeea'; ctx.lineWidth = 1; ctx.stroke();
+
+    // Left color bar
+    ctx.fillStyle = q.cat.color;
+    ctx.fillRect(cardX, y, 3, cardH);
+
+    let cy = y + 14;
+
+    // Name
+    ctx.font = fnt(13, '600');
+    ctx.fillStyle = q.cat.color;
+    ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+    ctx.fillText(`${rank + 1}. ${q.label}`, textX, cy);
+
+    // Score badge
+    ctx.font = fnt(11, '600');
+    ctx.fillStyle = '#aaaaaa';
+    ctx.textAlign = 'right';
+    ctx.fillText(`${val} / 10`, cardX + innerW - 10, cy + 1);
+    cy += 28;
+
+    // Reflection box
+    const reflectText = '“' + ref.reflect + '”';
+    ctx.font = fnt(12, '400', 'italic');
+    ctx.textAlign = 'left';
+    const rLines = wrapLines(ctx, reflectText, textW - 20);
+    const rBoxH = rLines.length * LH + 20;
+    rrect(ctx, textX, cy, textW, rBoxH, 6);
+    ctx.fillStyle = '#f6f6f3'; ctx.fill();
+    ctx.fillStyle = '#555555';
+    rLines.forEach((line, li) => ctx.fillText(line, textX + 10, cy + 10 + li * LH));
+    cy += rBoxH + 10;
+
+    // Ideas
+    ref.ideas.forEach((idea, ii) => {
+      ctx.font = fnt(11);
+      ctx.fillStyle = '#bbbbbb';
+      ctx.textAlign = 'left';
+      ctx.fillText('→', textX, cy + 1);
+
+      ctx.fillStyle = '#333333';
+      ctx.font = fnt(12);
+      const iLines = wrapLines(ctx, idea, textW - 16);
+      iLines.forEach((l, li) => ctx.fillText(l, textX + 16, cy + li * LH));
+      cy += iLines.length * LH + 8;
+
+      // Divider between ideas
+      if (ii < ref.ideas.length - 1) {
+        ctx.strokeStyle = '#eeeeea'; ctx.lineWidth = 0.5;
+        ctx.beginPath(); ctx.moveTo(textX, cy); ctx.lineTo(cardX + innerW - 10, cy); ctx.stroke();
+        cy += 8;
+      }
+    });
+
+    y += cardH + 12;
+  });
+
+  y += 32; // bottom padding
+
+  // ── Export ──
+  const a = document.createElement('a');
+  a.download = 'balance-life-wheel.png';
+  a.href = off.toDataURL('image/png');
+  a.click();
+}
+
+// Redraw on resize
+window.addEventListener('resize', () => {
+  if (document.getElementById('screen-results').classList.contains('active')) {
+    drawWheel();
+  }
+});
+</script>
+</body>
+</html>
